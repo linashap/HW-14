@@ -1,0 +1,59 @@
+'''Написать программу таймер. Программа при запуске принимает имя,
+фамилию, часы, минуты и секунды. После программа начинает обратный
+отсчет выводя оставшееся время. Программа должна хранить файл
+логирования с информацией о том кто запускал программу и когда.
+Пример:
+00:00:03
+00:00:02
+00:00:01
+ALARM!!!'''
+
+from datetime import datetime
+
+import argparse
+import time
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-n","--name",default="Ivan",type=str)
+parser.add_argument('-f', '--fam', default="Ivanov",type=str)
+parser.add_argument('hours', default=0, type=int)
+parser.add_argument('minutes', default=1, type=int)
+parser.add_argument('seconds',  default=5, type=int)
+args = parser.parse_args()
+
+
+
+with open('login.txt', 'a') as file:
+    file.write(f'{datetime.now().strftime("%d/%m/%y %H:%M:%S")} - {args.name} {args.fam} \n')
+while args.hours or args.minutes or args.seconds:
+    time_str = ''
+    if args.hours < 10:
+        time_str += f'0{args.hours}'
+    else:
+        time_str += f'{args.hours}'
+
+    if args.minutes < 10:
+        time_str += f':0{args.minutes}'
+    else:
+        time_str += f':{args.minutes}'
+
+    if args.seconds < 10:
+        time_str += f':0{args.seconds}'
+    else:
+        time_str += f':{args.seconds}'
+    print(time_str)
+    time.sleep(1)
+    if args.seconds == 0 and args.minutes > 0:
+        args.minutes -= 1
+        args.seconds = 59
+    elif args.seconds == 0 and args.minutes == 0 and args.hours > 0:
+        args.hours -= 1
+        args.minutes = 59
+        args.seconds = 59
+    else:
+        args.seconds -= 1
+else:
+    print('ALARM!!!!')
+
+
