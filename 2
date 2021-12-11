@@ -1,0 +1,38 @@
+'''На вход программа получает имя, фамилию, время для
+фокусировки(по-умолчанию 25 минут), длину перерыва(по-умолчанию 5 минут),
+количество циклов(по-умолчанию 4) и название задачи. Программа указывает
+оставшееся время работы, после сигнализирует о наступлении перерыва,
+после сигнализирует о начале нового цикла фокусировки. Программа должна
+вести файл лога о всех запусках
+
+'''
+
+import argparse
+import time
+parser=argparse.ArgumentParser()
+parser.add_argument("n",type=str,help="Введите имя")
+parser.add_argument("s",type=str,help="Введите фамилию")
+parser.add_argument("t",type=str,help="Введите имя задачи")
+parser.add_argument("-w","-worcktime",default=25,type=float,help="Введите время для работы (по-умолчанию 25 минут)")
+parser.add_argument("-p","-pausetime",default=5,type=float,help="Введите длину перерыва(по-умолчанию 5 минут)")
+parser.add_argument("-c","-cicle",default=4,type=float,help="Введите количество циклов(по-умолчанию 4)")
+
+args=parser.parse_args()
+
+filename="log.txt"
+
+file=open(filename,mode="a+",encoding="UTF-8")
+
+file.write(f" /n {args.n} {args.s} - задача {args.t} запускал программу на колличество циклов: {args.c} со временем на работы {args.w} минут и перерывами в {args.p} минут /n")
+counter=0
+while counter<args.c:
+    print(f"Осталось работать {args.w}")
+
+    time.sleep((args.w * 60))
+
+    print(f"У вас перерыв на {args.p}")
+
+    time.sleep((args.p * 60))
+    print(' ')
+    print(" ")
+    counter+=1
